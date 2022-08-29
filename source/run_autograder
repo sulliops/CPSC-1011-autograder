@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Copies the files into the Autograder's CWD 
+cp -r /autograder/submission/* /autograder/source/
+
+cd /autograder/source
+
+# Runs the student's make file ( if you're not using makefiles then place you compile command here )
+make
+
+python3 run_tests.py > /autograder/results/results.json
