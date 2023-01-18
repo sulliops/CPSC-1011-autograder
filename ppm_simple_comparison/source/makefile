@@ -8,9 +8,6 @@ all: $(PROGRAM)
 run: $(PROGRAM)
 	./$(PROGRAM)
 
-noinput: $(PROGRAM)
-	./$(PROGRAM) noinput
-
 $(PROGRAM): main.c
 	$(COMPILER) $(STD_OPTION) $(WARNING_OPTION) main.c $(OUTPUT_OPTION) $(PROGRAM) 
 

@@ -1,0 +1,5 @@
+Autograder test program...
+
+Enter an input (1, 2, or 3): 
+You chose input 2.
+All done!

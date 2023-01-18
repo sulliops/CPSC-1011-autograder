@@ -72,7 +72,7 @@ class TestDiff(unittest.TestCase):
     # Associated test number within Gradescope
     @number("1")
     # Associated point value within Gradescope
-    @weight(2.5)
+    @weight(5)
     def test_checkFiles(self):
         """Ensure all required files are present"""
         
@@ -82,7 +82,7 @@ class TestDiff(unittest.TestCase):
     # Associated test number within Gradescope
     @number("2")
     # Associated point value within Gradescope
-    @weight(7.5)
+    @weight(10)
     def test_Compile(self):
         # Title used by Gradescope 
         """Clean compile"""
@@ -100,13 +100,14 @@ class TestDiff(unittest.TestCase):
     # Associated test number within Gradescope
     @number("3")
     # Associated point value within Gradescope
-    @weight(15)
-    def test_Stdout(self):
+    @weight(10)
+    def test_PPMWidth15Header(self):
         # Title used by Gradescope 
-        """Check that stdout output is correct without input"""
+        """Check that PPM header information is correct with width 15"""
 
         # Create a subprocess to run the students code to obtain an output
-        test = subprocess.Popen(["make -s noinput"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -117,16 +118,45 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/noinput.txt', 'rb').read().strip().decode('utf-8')
+                # Set msg to blank string, in case test passes
+                msg = ''
                 
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
+                # Array of expected lines of output, line by line in expected order
+                expected = ['P3', '15', '7', '255']
                 
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
-            
+                # Split output by lines
+                header = stdout.split()
+                
+                # Check if header information is correct
+                try:
+                    if header[0] != expected[0]:
+                        correct = False
+                        msg = f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[1] != expected[1]:
+                        correct = False
+                        msg = f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[2] != expected[2]:
+                        correct = False
+                        msg = f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[3] != expected[3]:
+                        correct = False
+                        msg = f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                
+                # Catch exception for array out of bounds
+                except (IndexError):
+                    correct = False
+                    msg = 'Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.'
+                    self.longMessage = False
+                    self.assertTrue(correct, msg)
+                
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
@@ -181,13 +211,13 @@ class TestDiff(unittest.TestCase):
     # Associated test number within Gradescope
     @number("4")
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput1(self):
+    @weight(32.5)
+    def test_PPMWidth15Image(self):
         # Title used by Gradescope 
-        """Check that input "1" results in correct stdout output"""
+        """Check that PPM image is correct with width 15"""
 
         # Create a subprocess to run the students code to obtain an output
-        cat = subprocess.Popen(["cat", "input/1.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
@@ -200,7 +230,7 @@ class TestDiff(unittest.TestCase):
                 test.kill()
                 
                 # Open reference output and decode
-                reference = open('reference/1.txt', 'rb').read().strip().decode('utf-8')
+                reference = open('reference/15.ppm', 'rb').read().strip().decode('utf-8')
                 
                 # Remove empty lines from both output and reference
                 stdout = removeEmptyLines(stdout)
@@ -259,17 +289,17 @@ class TestDiff(unittest.TestCase):
             self.assertTrue(correct, msg)
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("5")
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput2(self):
+    @weight(10)
+    def test_PPMWidth42Header(self):
         # Title used by Gradescope 
-        """Check that input "2" results in correct stdout output"""
+        """Check that PPM header information is correct with width 42"""
 
         # Create a subprocess to run the students code to obtain an output
-        cat = subprocess.Popen(["cat", "input/2.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
@@ -281,16 +311,45 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/2.txt', 'rb').read().strip().decode('utf-8')
+                # Set msg to blank string, in case test passes
+                msg = ''
                 
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
+                # Array of expected lines of output, line by line in expected order
+                expected = ['P3', '42', '21', '255']
                 
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
-            
+                # Split output by lines
+                header = stdout.split()
+                
+                # Check if header information is correct
+                try:
+                    if header[0] != expected[0]:
+                        correct = False
+                        msg = f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[1] != expected[1]:
+                        correct = False
+                        msg = f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[2] != expected[2]:
+                        correct = False
+                        msg = f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                    elif header[3] != expected[3]:
+                        correct = False
+                        msg = f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}'
+                        self.longMessage = False
+                        self.assertTrue(correct, msg)
+                
+                # Catch exception for array out of bounds
+                except (IndexError):
+                    correct = False
+                    msg = 'Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.'
+                    self.longMessage = False
+                    self.assertTrue(correct, msg)
+                
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
@@ -341,17 +400,17 @@ class TestDiff(unittest.TestCase):
             self.assertTrue(correct, msg)
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("6")
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput3(self):
+    @weight(32.5)
+    def test_PPMWidth42Image(self):
         # Title used by Gradescope 
-        """Check that input "3" results in correct stdout output"""
+        """Check that PPM image is correct with width 42"""
 
         # Create a subprocess to run the students code to obtain an output
-        cat = subprocess.Popen(["cat", "input/3.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
@@ -364,7 +423,7 @@ class TestDiff(unittest.TestCase):
                 test.kill()
                 
                 # Open reference output and decode
-                reference = open('reference/3.txt', 'rb').read().strip().decode('utf-8')
+                reference = open('reference/42.ppm', 'rb').read().strip().decode('utf-8')
                 
                 # Remove empty lines from both output and reference
                 stdout = removeEmptyLines(stdout)
@@ -372,180 +431,6 @@ class TestDiff(unittest.TestCase):
                 
                 # Check the contents of stdout against reference
                 self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
-            
-            # Catch exception for decode error
-            except (UnicodeDecodeError):
-                test.kill()
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
-                self.longMessage = False
-                self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8')).split('\n')
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        test.terminate()
-    
-    # Associated test number within Gradescope
-    @number("7")
-    # Associated point value within Gradescope
-    @weight(15)
-    def test_StderrInvalidInput(self):
-        # Title used by Gradescope 
-        """Check that invalid input results in correct stderr output"""
-
-        # Create a subprocess to run the students code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = test.communicate()
-        
-        try:
-            checkRuntimeErrors(test)
-            
-            # Try to decode stderr
-            try:
-                stderr = stderr.strip().decode('utf-8')
-                test.kill()
-                
-                # Open reference output and decode
-                reference = open('reference/invalid_stderr.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stderr = removeEmptyLines(stderr)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stderr, reference, msg='Program output does not match expected output.')
-            
-            # Catch exception for decode error
-            except (UnicodeDecodeError):
-                test.kill()
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
-                self.longMessage = False
-                self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8')).split('\n')
-            self.longMessage = False
-            self.assertTrue(correct, msg)
-        
-        test.terminate()
-    
-    # Associated test number within Gradescope
-    @number("8")
-    # Associated point value within Gradescope
-    @weight(15)
-    def test_MixedStdoutStderrOutput(self):
-        # Title used by Gradescope 
-        """Check that program outputs to both stdout and stderr"""
-
-        # Create a subprocess to run the students code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = test.communicate()
-        
-        try:
-            checkRuntimeErrors(test)
-            
-            # Try to decode stdout and stderr
-            try:
-                stdout = stdout.strip().decode('utf-8')
-                stderr = stderr.strip().decode('utf-8')
-                test.kill()
-                
-                # Open reference output and decode
-                reference_stdout = open('reference/invalid_stdout.txt', 'rb').read().strip().decode('utf-8')
-                reference_stderr = open('reference/invalid_stderr.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                stderr = removeEmptyLines(stderr)
-                reference_stdout = removeEmptyLines(reference_stdout)
-                reference_stderr = removeEmptyLines(reference_stderr)
-                
-                # Check if stdout is empty but stderr has content
-                if not stdout and stderr:
-                    # Check that stderr and reference are equal
-                    self.assertEqual(stderr, reference_stderr, msg='Program output does not match expected output.')
-                # If stderr is not usable for comparison, test with stdout
-                else:
-                    # Check that stdout and reference are equal
-                    self.assertEqual(stdout, reference_stdout, msg='Program output does not match expected output.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
