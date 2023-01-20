@@ -24,39 +24,59 @@ def removeEmptyLines(text):
     return "\n".join(list(lst))
 
 # Series of exception classes that allow raising runtime exceptions
-# All of these simply pass and exist for detection
+# All of these kill the process that runs the student's program,
+# then fails the test with a pre-defined message
 class RuntimeAbort(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 class RuntimeSegFault(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 class RuntimeFPE(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 class RuntimeBusError(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 class RuntimeIllegalInstruction(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 class MakefileError(Exception):
-    pass
+    def __init__(self, proc, utest, msg):
+        proc.kill()
+        utest.longMessage = False
+        utest.assertTrue(False, wrap(msg, 75))
 
 # Function to check subprocess process for common runtime error signals
-def checkRuntimeErrors(proc):
+# Raises exceptions with custom messages for test failures
+def checkRuntimeErrors(proc, utest, stdout, stderr):
     if ((proc.returncode % 128) == int(signal.SIGABRT)):
-        raise RuntimeAbort
+        raise RuntimeAbort(proc, utest, 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
     elif ((proc.returncode % 128) == int(signal.SIGSEGV)):
-        raise RuntimeSegFault
+        raise RuntimeSegFault(proc, utest, 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
     elif ((proc.returncode % 128) == int(signal.SIGFPE)):
-        raise RuntimeFPE
+        raise RuntimeFPE(proc, utest, 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
     elif ((proc.returncode % 128) == int(signal.SIGBUS)):
-        raise RuntimeBusError
+        raise RuntimeBusError(proc, utest, 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
     elif ((proc.returncode % 128) == int(signal.SIGILL)):
-        raise RuntimeIllegalInstruction
+        raise RuntimeIllegalInstruction(proc, utest, 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
     elif ((proc.returncode % 128) == int(signal.SIGINT)):
-        raise MakefileError
+        raise MakefileError(proc, utest, (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8')))
 
 # Function to wrap strings for cleaner output in Gradescope
 def wrap(string, width):
@@ -113,18 +133,17 @@ class TestDiff(unittest.TestCase):
         # Create a subprocess to run the students code to obtain an output
         cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat.kill()
+        cat.terminate()
         stdout, stderr = test.communicate()
         
         try:
-            checkRuntimeErrors(test)
+            checkRuntimeErrors(test, self, stdout, stderr)
             
             # Try to decode stdout
             try:
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
-                
-                # Set msg to blank string, in case test passes
-                msg = ''
                 
                 # Array of expected lines of output, line by line in expected order
                 expected = ['P3', '15', '7', '255']
@@ -135,87 +154,34 @@ class TestDiff(unittest.TestCase):
                 # Check if header information is correct
                 try:
                     if header[0] != expected[0]:
-                        correct = False
-                        msg = f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 75))
                     elif header[1] != expected[1]:
-                        correct = False
-                        msg = f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 75))
                     elif header[2] != expected[2]:
-                        correct = False
-                        msg = f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 75))
                     elif header[3] != expected[3]:
-                        correct = False
-                        msg = f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 75))
+                    else:
+                        self.assertTrue(True, '')
                 
                 # Catch exception for array out of bounds
                 except (IndexError):
-                    correct = False
-                    msg = 'Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.'
                     self.longMessage = False
-                    self.assertTrue(correct, wrap(msg, 75))
+                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 75))
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
-                correct = False
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
                 self.longMessage = False
-                self.assertTrue(correct, wrap(msg, 75))
+                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
         
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            test.kill()
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8'))
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
         
         test.terminate()
 
@@ -230,10 +196,12 @@ class TestDiff(unittest.TestCase):
         # Create a subprocess to run the students code to obtain an output
         cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat.kill()
+        cat.terminate()
         stdout, stderr = test.communicate()
         
         try:
-            checkRuntimeErrors(test)
+            checkRuntimeErrors(test, self, stdout, stderr)
             
             # Try to decode stdout
             try:
@@ -253,57 +221,12 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
-                correct = False
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
                 self.longMessage = False
-                self.assertTrue(correct, wrap(msg, 75))
+                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
         
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            test.kill()
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8'))
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
         
         test.terminate()
 
@@ -318,10 +241,12 @@ class TestDiff(unittest.TestCase):
         # Create a subprocess to run the students code to obtain an output
         cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat.kill()
+        cat.terminate()
         stdout, stderr = test.communicate()
         
         try:
-            checkRuntimeErrors(test)
+            checkRuntimeErrors(test, self, stdout, stderr)
             
             # Try to decode stdout
             try:
@@ -340,87 +265,34 @@ class TestDiff(unittest.TestCase):
                 # Check if header information is correct
                 try:
                     if header[0] != expected[0]:
-                        correct = False
-                        msg = f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 75))
                     elif header[1] != expected[1]:
-                        correct = False
-                        msg = f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 75))
                     elif header[2] != expected[2]:
-                        correct = False
-                        msg = f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 75))
                     elif header[3] != expected[3]:
-                        correct = False
-                        msg = f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}'
                         self.longMessage = False
-                        self.assertTrue(correct, wrap(msg, 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 75))
+                    else:
+                        self.assertTrue(True, '')
                 
                 # Catch exception for array out of bounds
                 except (IndexError):
-                    correct = False
-                    msg = 'Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.'
                     self.longMessage = False
-                    self.assertTrue(correct, wrap(msg, 75))
+                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 75))
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
-                correct = False
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
                 self.longMessage = False
-                self.assertTrue(correct, wrap(msg, 75))
+                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
         
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            test.kill()
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8'))
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
         
         test.terminate()
 
@@ -435,10 +307,12 @@ class TestDiff(unittest.TestCase):
         # Create a subprocess to run the students code to obtain an output
         cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cat.kill()
+        cat.terminate()
         stdout, stderr = test.communicate()
         
         try:
-            checkRuntimeErrors(test)
+            checkRuntimeErrors(test, self, stdout, stderr)
             
             # Try to decode stdout
             try:
@@ -458,56 +332,11 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 test.kill()
-                correct = False
-                msg = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
                 self.longMessage = False
-                self.assertTrue(correct, wrap(msg, 75))
+                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
         
-        # Catch exception for SIGABRT
-        except (RuntimeAbort):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGSEGV
-        except (RuntimeSegFault):
-            test.kill()
-            correct = False
-            msg = 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGFPE
-        except (RuntimeFPE):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGBUS
-        except (RuntimeBusError):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for SIGILL
-        except (RuntimeIllegalInstruction):
-            test.kill()
-            correct = False
-            msg = 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.'
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
-        
-        # Catch exception for errors thrown by Make
-        except (MakefileError):
-            correct = False
-            msg = (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8'))
-            self.longMessage = False
-            self.assertTrue(correct, wrap(msg, 75))
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
         
         test.terminate()
