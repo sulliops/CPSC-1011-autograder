@@ -23,44 +23,38 @@ def removeEmptyLines(text):
     lst = filter(nonEmptyLine, list(map(stripstr, text.split("\n"))))
     return "\n".join(list(lst))
 
-# Series of exception classes that allow raising runtime exceptions
-# All of these kill the process that runs the student's program,
+# Function that kills the process that runs the student's program,
 # then fails the test with a pre-defined message
+def kill_fail(proc, utest, msg):
+    proc.kill()
+    utest.longMessage = False
+    utest.assertTrue(False, wrap(msg, 75))
+
+# Series of exception classes that allow raising runtime exceptions
+# All of these just call kill_fail function
 class RuntimeAbort(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 class RuntimeSegFault(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 class RuntimeFPE(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 class RuntimeBusError(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 class RuntimeIllegalInstruction(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 class MakefileError(Exception):
     def __init__(self, proc, utest, msg):
-        proc.kill()
-        utest.longMessage = False
-        utest.assertTrue(False, wrap(msg, 75))
+        kill_fail(proc, utest, msg)
 
 # Function to check subprocess process for common runtime error signals
 # Raises exceptions with custom messages for test failures
