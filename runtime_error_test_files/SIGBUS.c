@@ -1,11 +1,11 @@
-int main()
-{
-   char *str;
- 
-   /* Stored in read only part of data segment */
-   str = "GfG";    
- 
-   /* Problem:  trying to modify read only memory */
-   *(str+1) = 'n';
-   return 0;
+int main(void) {
+
+    char *str;
+
+    str = "SIGILL";
+
+    *(str + 1) = 't';
+
+    return 0;
+
 }
