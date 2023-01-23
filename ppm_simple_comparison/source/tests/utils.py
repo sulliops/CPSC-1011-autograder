@@ -169,7 +169,7 @@ timeoutErrorMessage = 'Your program timed out while running this test case, like
 def kill_fail(proc, utest, msg):
     proc.kill()
     utest.longMessage = False
-    utest.assertTrue(False, wrap(msg, 75))
+    utest.assertTrue(False, wrap(msg, 65))
 
 # Series of exception classes that allow raising runtime exceptions
 # All of these just call kill_fail function
