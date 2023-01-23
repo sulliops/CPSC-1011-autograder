@@ -162,14 +162,14 @@ def removeEmptyLines(text):
     return "\n".join(list(lst))
 
 decodeErrorMessage = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
-timeoutErrorMessage = 'Your program timed out while running this test case.'
+timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
 
 # Function that kills the process that runs the student's program,
 # then fails the test with a pre-defined message
 def kill_fail(proc, utest, msg):
     proc.kill()
     utest.longMessage = False
-    utest.assertTrue(False, wrap(msg, 75))
+    utest.assertTrue(False, wrap(msg, 65))
 
 # Series of exception classes that allow raising runtime exceptions
 # All of these just call kill_fail function
