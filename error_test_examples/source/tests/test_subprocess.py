@@ -15,7 +15,7 @@ class TestDiff(unittest.TestCase):
     maxDiff = None
     
     # Array of all the expected file names
-    files = ['main.c']
+    files = ['unicodeDecodeError.c', 'input.c', 'loop.c', 'SIGABRT.c', 'SIGBUS.c', 'SIGFPE.c', 'SIGILL.c', 'SIGSEGV.c']
     
     # This has to exist for some reason
     def setUp(self):
@@ -60,13 +60,13 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_Stdout(self):
+    @weight(11.25)
+    def test_UnicodeDecodeError(self):
         # Title used by Gradescope 
-        """Check that stdout output is correct without input"""
+        """Demonstrate UnicodeDecodeError handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        test = subprocess.Popen(["make -s noinput"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        test = subprocess.Popen(["./unicodeDecodeError input.c"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -77,15 +77,7 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/noinput.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -104,16 +96,13 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput1(self):
+    @weight(11.25)
+    def test_Timeout(self):
         # Title used by Gradescope 
-        """Check that input "1" results in correct stdout output"""
+        """Demonstrate program timeout handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/1.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["./loop.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -124,15 +113,7 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/1.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -143,7 +124,7 @@ class TestDiff(unittest.TestCase):
             pass
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("5")
     # Test visibility
@@ -151,16 +132,13 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput2(self):
+    @weight(11.25)
+    def test_SIGABRT(self):
         # Title used by Gradescope 
-        """Check that input "2" results in correct stdout output"""
+        """Demonstrate SIGABRT handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/2.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["./SIGABRT.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -171,15 +149,7 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/2.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -190,7 +160,7 @@ class TestDiff(unittest.TestCase):
             pass
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("6")
     # Test visibility
@@ -198,16 +168,13 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StdoutInput3(self):
+    @weight(11.25)
+    def test_SIGBUS(self):
         # Title used by Gradescope 
-        """Check that input "3" results in correct stdout output"""
+        """Demonstrate SIGBUS handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/3.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["./SIGBUS.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -218,15 +185,7 @@ class TestDiff(unittest.TestCase):
                 stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/3.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -237,7 +196,7 @@ class TestDiff(unittest.TestCase):
             pass
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("7")
     # Test visibility
@@ -245,35 +204,24 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_StderrInvalidInput(self):
+    @weight(11.25)
+    def test_SIGFPE(self):
         # Title used by Gradescope 
-        """Check that invalid input results in correct stderr output"""
+        """Demonstrate SIGFPE handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["./SIGFPE.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
             checkRuntimeErrors(test, self, stdout, stderr)
             
-            # Try to decode stderr
+            # Try to decode stdout
             try:
-                stderr = stderr.strip().decode('utf-8')
+                stdout = stdout.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference = open('reference/invalid_stderr.txt', 'rb').read().strip().decode('utf-8')
-                
-                # Remove empty lines from both output and reference
-                stderr = removeEmptyLines(stderr)
-                reference = removeEmptyLines(reference)
-                
-                # Check the contents of stdout against reference
-                self.assertEqual(stderr, reference, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -284,7 +232,7 @@ class TestDiff(unittest.TestCase):
             pass
         
         test.terminate()
-    
+
     # Associated test number within Gradescope
     @number("8")
     # Test visibility
@@ -292,45 +240,96 @@ class TestDiff(unittest.TestCase):
     # Individual test case timeout (in seconds)
     @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
     # Associated point value within Gradescope
-    @weight(15)
-    def test_MixedStdoutStderrOutput(self):
+    @weight(11.25)
+    def test_SIGILL(self):
         # Title used by Gradescope 
-        """Check that program outputs to both stdout and stderr"""
+        """Demonstrate SIGILL handling"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["./SIGILL.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
             checkRuntimeErrors(test, self, stdout, stderr)
             
-            # Try to decode stdout and stderr
+            # Try to decode stdout
             try:
                 stdout = stdout.strip().decode('utf-8')
-                stderr = stderr.strip().decode('utf-8')
                 test.kill()
                 
-                # Open reference output and decode
-                reference_stdout = open('reference/invalid_stdout.txt', 'rb').read().strip().decode('utf-8')
-                reference_stderr = open('reference/invalid_stderr.txt', 'rb').read().strip().decode('utf-8')
+                self.assertTrue(True, msg='Passed.')
+            
+            # Catch exception for decode error
+            except (UnicodeDecodeError):
+                kill_fail(test, self, decodeErrorMessage)
+        
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
+        
+        test.terminate()
+
+    # Associated test number within Gradescope
+    @number("9")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    # Associated point value within Gradescope
+    @weight(11.25)
+    def test_SIGSEGV(self):
+        # Title used by Gradescope 
+        """Demonstrate SIGSEGV handling"""
+
+        # Create a subprocess to run the student's code to obtain an output
+        test = subprocess.Popen(["./SIGSEGV.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = test.communicate()
+        
+        try:
+            checkRuntimeErrors(test, self, stdout, stderr)
+            
+            # Try to decode stdout
+            try:
+                stdout = stdout.strip().decode('utf-8')
+                test.kill()
                 
-                # Remove empty lines from both output and reference
-                stdout = removeEmptyLines(stdout)
-                stderr = removeEmptyLines(stderr)
-                reference_stdout = removeEmptyLines(reference_stdout)
-                reference_stderr = removeEmptyLines(reference_stderr)
+                self.assertTrue(True, msg='Passed.')
+            
+            # Catch exception for decode error
+            except (UnicodeDecodeError):
+                kill_fail(test, self, decodeErrorMessage)
+        
+        # Catch runtime error exceptions
+        except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
+            pass
+        
+        test.terminate()
+
+    # Associated test number within Gradescope
+    @number("10")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    # Associated point value within Gradescope
+    @weight(11.25)
+    def test_SIGSEGV(self):
+        # Title used by Gradescope 
+        """Demonstrate Makefile error handling"""
+
+        # Create a subprocess to run the student's code to obtain an output
+        test = subprocess.Popen(["make -s run"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = test.communicate()
+        
+        try:
+            checkRuntimeErrors(test, self, stdout, stderr)
+            
+            # Try to decode stdout
+            try:
+                stdout = stdout.strip().decode('utf-8')
+                test.kill()
                 
-                # Check if stdout is empty but stderr has content
-                if not stdout and stderr:
-                    # Check that stderr and reference are equal
-                    self.assertEqual(stderr, reference_stderr, msg='Program output does not match expected output.')
-                # If stderr is not usable for comparison, test with stdout
-                else:
-                    # Check that stdout and reference are equal
-                    self.assertEqual(stdout, reference_stdout, msg='Program output does not match expected output.')
+                self.assertTrue(True, msg='Passed.')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):

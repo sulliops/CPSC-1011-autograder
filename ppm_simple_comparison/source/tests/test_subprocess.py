@@ -43,7 +43,7 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Clean compile"""
 
-        # Create a subprocess to run the students make file to ensure it compiles
+        # Create a subprocess to run the student's Makefile to ensure it compiles
         test = subprocess.Popen(["make"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output = test.stderr.read().strip().decode('utf-8')
         test.kill()
@@ -65,7 +65,7 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that PPM header information is correct with width 15"""
 
-        # Create a subprocess to run the students code to obtain an output
+        # Create a subprocess to run the student's code to obtain an output
         cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         cat.kill()
@@ -130,7 +130,7 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that PPM image is correct with width 15"""
 
-        # Create a subprocess to run the students code to obtain an output
+        # Create a subprocess to run the student's code to obtain an output
         cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         cat.kill()
@@ -177,7 +177,7 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that PPM header information is correct with width 42"""
 
-        # Create a subprocess to run the students code to obtain an output
+        # Create a subprocess to run the student's code to obtain an output
         cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         cat.kill()
@@ -245,7 +245,7 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that PPM image is correct with width 42"""
 
-        # Create a subprocess to run the students code to obtain an output
+        # Create a subprocess to run the student's code to obtain an output
         cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         cat.kill()
