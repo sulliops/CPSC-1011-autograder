@@ -1,6 +1,7 @@
 import unittest
+import timeout_decorator
 # Requires gradescope_utils
-from gradescope_utils.autograder_utils.decorators import number, weight
+from gradescope_utils.autograder_utils.decorators import number, weight, visibility
 import subprocess
 from time import sleep
 from re import sub
@@ -21,6 +22,8 @@ class TestDiff(unittest.TestCase):
 
     # Associated test number within Gradescope
     @number("1")
+    # Test visibility
+    @visibility("visible")
     # Associated point value within Gradescope
     @weight(5)
     def test_checkFiles(self):
@@ -31,6 +34,8 @@ class TestDiff(unittest.TestCase):
     
     # Associated test number within Gradescope
     @number("2")
+    # Test visibility
+    @visibility("visible")
     # Associated point value within Gradescope
     @weight(10)
     def test_Compile(self):
@@ -49,6 +54,10 @@ class TestDiff(unittest.TestCase):
 
     # Associated test number within Gradescope
     @number("3")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout_decorator.timeout(30, exception_message=timeoutErrorMessage)
     # Associated point value within Gradescope
     @weight(10)
     def test_PPMWidth15Header(self):
@@ -110,6 +119,10 @@ class TestDiff(unittest.TestCase):
 
     # Associated test number within Gradescope
     @number("4")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout_decorator.timeout(30, exception_message=timeoutErrorMessage)
     # Associated point value within Gradescope
     @weight(32.5)
     def test_PPMWidth15Image(self):
@@ -153,6 +166,10 @@ class TestDiff(unittest.TestCase):
 
     # Associated test number within Gradescope
     @number("5")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout_decorator.timeout(30, exception_message=timeoutErrorMessage)
     # Associated point value within Gradescope
     @weight(10)
     def test_PPMWidth42Header(self):
@@ -217,6 +234,10 @@ class TestDiff(unittest.TestCase):
 
     # Associated test number within Gradescope
     @number("6")
+    # Test visibility
+    @visibility("visible")
+    # Individual test case timeout (in seconds)
+    @timeout_decorator.timeout(30, exception_message=timeoutErrorMessage)
     # Associated point value within Gradescope
     @weight(32.5)
     def test_PPMWidth42Image(self):
