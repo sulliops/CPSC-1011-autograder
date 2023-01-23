@@ -2,7 +2,7 @@ int main(void) {
 
     char *str;
 
-    str = "SIGILL";
+    str = "SIGBUS";
 
     *(str + 1) = 't';
 
