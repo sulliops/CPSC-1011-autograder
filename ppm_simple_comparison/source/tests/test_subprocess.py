@@ -100,9 +100,7 @@ class TestDiff(unittest.TestCase):
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
-                test.kill()
-                self.longMessage = False
-                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
+                kill_fail(test, self, decodeErrorMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -145,9 +143,7 @@ class TestDiff(unittest.TestCase):
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
-                test.kill()
-                self.longMessage = False
-                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
+                kill_fail(test, self, decodeErrorMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -211,9 +207,7 @@ class TestDiff(unittest.TestCase):
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
-                test.kill()
-                self.longMessage = False
-                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
+                kill_fail(test, self, decodeErrorMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -256,9 +250,7 @@ class TestDiff(unittest.TestCase):
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
-                test.kill()
-                self.longMessage = False
-                self.assertTrue(False, wrap('Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.', 75))
+                kill_fail(test, self, decodeErrorMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
