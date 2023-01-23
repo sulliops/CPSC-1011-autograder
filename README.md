@@ -43,3 +43,16 @@ However, here's a brief overview of some standout functions:
 2. `wrap(string, max_length)`: This function wraps long error messages to a specified length to allow them to be shown cleanly in the Gradescope interface. The recommended value for `max_length` is `65` characters.
 3. `checkRuntimeErrors(proc, utest, stdout, stderr)`: This function determines if the `returncode` of a `subprocess.Popen` call matches any of the most common C program runtime errors. If a match is found, the constructor for a custom exception is called (which, in turn, calls `kill_fail(proc, utest, msg)` (except for Makefile return codes, which are handled separately).
 4. `kill_fail(proc, utest, msg)`: This function kills the child process spawned by `subprocess.Popen`, disables the default `unittest` behavior of limiting long error messages, and fails the test with a message supplied by the caller.
+
+----
+
+## Usage:
+To test any of these autograders, zip the contents of `source/` (recursively) and upload the resulting zip file to a Gradescope Programming Assignment then upload the relevant files from within `submission/` to test.
+
+Alternatively, copy the file structure of a given sample autograder (including `results/`, `source/`, and `submission/`) recursively to the root of a server running Linux (Ubuntu 22.04 recommended). Then, run the following:
+
+```
+cd source
+chmod +x run_autograder
+./run_autograder
+```
