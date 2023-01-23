@@ -200,17 +200,17 @@ class MakefileError(Exception):
 # Function to check subprocess process for common runtime error signals
 # Raises exceptions with custom messages for test failures
 def checkRuntimeErrors(proc, utest, stdout, stderr):
-    if ((proc.returncode % 128) == int(signal.SIGABRT)):
+    if ((abs(proc.returncode) % 128) == int(signal.SIGABRT)):
         raise RuntimeAbort(proc, utest, 'Your program triggered runtime error SIGABRT. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
-    elif ((proc.returncode % 128) == int(signal.SIGSEGV)):
+    elif ((abs(proc.returncode) % 128) == int(signal.SIGSEGV)):
         raise RuntimeSegFault(proc, utest, 'Your program encountered a segmentation fault. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
-    elif ((proc.returncode % 128) == int(signal.SIGFPE)):
+    elif ((abs(proc.returncode) % 128) == int(signal.SIGFPE)):
         raise RuntimeFPE(proc, utest, 'Your program triggered runtime error SIGFPE (typically caused by dividing by zero). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
-    elif ((proc.returncode % 128) == int(signal.SIGBUS)):
+    elif ((abs(proc.returncode) % 128) == int(signal.SIGBUS)):
         raise RuntimeBusError(proc, utest, 'Your program triggered runtime error SIGBUS. Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
-    elif ((proc.returncode % 128) == int(signal.SIGILL)):
+    elif ((abs(proc.returncode) % 128) == int(signal.SIGILL)):
         raise RuntimeIllegalInstruction(proc, utest, 'Your program triggered runtime error SIGILL (typically caused by stack smashing). Check for compilation warnings, use GDB to track down the cause of this error, or Google this error for more information.')
-    elif ((proc.returncode % 128) == int(signal.SIGINT)):
+    elif ((abs(proc.returncode) % 128) == int(signal.SIGINT)):
         raise MakefileError(proc, utest, (stderr.strip().decode('utf-8') + '\n' + stdout.strip().decode('utf-8')))
 
 # Function to wrap strings for cleaner output in Gradescope
