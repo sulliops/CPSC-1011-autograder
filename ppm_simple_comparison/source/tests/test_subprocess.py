@@ -66,10 +66,7 @@ class TestDiff(unittest.TestCase):
         """Check that PPM header information is correct with width 15"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/15.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -131,10 +128,7 @@ class TestDiff(unittest.TestCase):
         """Check that PPM image is correct with width 15"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/15.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/15.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -178,10 +172,7 @@ class TestDiff(unittest.TestCase):
         """Check that PPM header information is correct with width 42"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/42.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -246,10 +237,7 @@ class TestDiff(unittest.TestCase):
         """Check that PPM image is correct with width 42"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/42.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/42.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:

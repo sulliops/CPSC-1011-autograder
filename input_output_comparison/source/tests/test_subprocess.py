@@ -110,10 +110,7 @@ class TestDiff(unittest.TestCase):
         """Check that input "1" results in correct stdout output"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/1.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/1.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -157,10 +154,7 @@ class TestDiff(unittest.TestCase):
         """Check that input "2" results in correct stdout output"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/2.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/2.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -204,10 +198,7 @@ class TestDiff(unittest.TestCase):
         """Check that input "3" results in correct stdout output"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/3.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/3.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -251,10 +242,7 @@ class TestDiff(unittest.TestCase):
         """Check that invalid input results in correct stderr output"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/invalid.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -298,10 +286,7 @@ class TestDiff(unittest.TestCase):
         """Check that program outputs to both stdout and stderr"""
 
         # Create a subprocess to run the student's code to obtain an output
-        cat = subprocess.Popen(["cat", "input/invalid.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        test = subprocess.Popen(["make -s run"], shell=True, stdin=cat.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cat.kill()
-        cat.terminate()
+        test = subprocess.Popen(["make -s run < input/invalid.txt"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
