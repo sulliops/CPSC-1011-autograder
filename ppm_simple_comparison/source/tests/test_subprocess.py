@@ -17,9 +17,13 @@ class TestDiff(unittest.TestCase):
     # Array of all the expected file names
     files = ['main.c']
     
-    # This has to exist for some reason
+    # Set up unittest environment
     def setUp(self):
-        pass
+        self.addTypeEqualityFunc(str, self.customCompare)
+        
+    # Define custom TypeEquality function that calls function from utils.py
+    def customCompare(self, first, second, msg=None):
+        customAssertMultiLineEqual(self, first, second, msg)
 
     # Associated test number within Gradescope
     @number("1")
@@ -147,7 +151,7 @@ class TestDiff(unittest.TestCase):
                 reference = removeEmptyLines(reference)
                 
                 # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.customCompare(stdout, reference, msg='Program output does not match expected output')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -256,7 +260,7 @@ class TestDiff(unittest.TestCase):
                 reference = removeEmptyLines(reference)
                 
                 # Check the contents of stdout against reference
-                self.assertEqual(stdout, reference, msg='Program output does not match expected output.')
+                self.customCompare(stdout, reference, msg='Program output does not match expected output')
             
             # Catch exception for decode error
             except (UnicodeDecodeError):

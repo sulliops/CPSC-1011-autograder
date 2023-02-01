@@ -43,6 +43,8 @@ However, here's a brief overview of some standout functions:
 2. `wrap(string, max_length)`: This function wraps long error messages to a specified length to allow them to be shown cleanly in the Gradescope interface. The recommended value for `max_length` is `65` characters.
 3. `checkRuntimeErrors(proc, utest, stdout, stderr)`: This function determines if the `returncode` of a `subprocess.Popen` call matches any of the most common C program runtime errors. If a match is found, the constructor for a custom exception is called (which, in turn, calls `kill_fail(proc, utest, msg)` (except for Makefile return codes, which are handled separately).
 4. `kill_fail(proc, utest, msg)`: This function kills the child process spawned by `subprocess.Popen`, disables the default `unittest` behavior of limiting long error messages, and fails the test with a message supplied by the caller.
+5. `removeEmptyLines(text)`: This function works with a few helper functions to strip string outputs of empty lines and instances of more than one space.
+6. `customAssertMultiLineEqual(self, first, second, msg)`: Custom-edited version of `unittest`'s `assertMultiLineEqual()` function that uses a few helper functions to re-format diff checks for output comparisons.
 
 ----
 

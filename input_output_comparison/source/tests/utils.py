@@ -5,6 +5,7 @@ import subprocess
 import signal
 import re
 import textwrap
+import difflib
 
 # Return string with no whitespace and converted entirely to lowercase
 def clean(s: str) -> str:
@@ -216,3 +217,49 @@ def checkRuntimeErrors(proc, utest, stdout, stderr):
 # Function to wrap strings for cleaner output in Gradescope
 def wrap(string, width):
     return textwrap.fill(string, width)
+
+# safe_repr copied from unittest utils library
+def safe_repr(obj, short=False):
+    try:
+        result = repr(obj)
+    except Exception:
+        result = object.__repr__(obj)
+    if not short or len(result) < 80:
+        return result
+    return result[:80] + ' [truncated]...'
+
+# Custom formatMessage from unittest library
+def formatMessage(self, msg, standardMsg):
+    if not self.longMessage:
+        return msg or standardMsg
+    if msg is None:
+        return standardMsg
+    try:
+        # don't switch to '{}' formatting in Python 2.X
+        # it changes the way unicode input is handled
+        return '%s:%s' % (standardMsg, msg)
+    except UnicodeDecodeError:
+        return '%s:%s' % (safe_repr(standardMsg), safe_repr(msg))
+
+# Custom version of unittest assertMultiLineEqual tailored to make
+# diff checks more readable
+def customAssertMultiLineEqual(self, first, second, msg=None):
+    """(Custom) Assert that two multi-line strings are equal."""
+    self.assertIsInstance(first, str, 'First argument is not a string')
+    self.assertIsInstance(second, str, 'Second argument is not a string')
+
+    if first != second:
+        # don't use difflib if the strings are too long
+        if (len(first) > self._diffThreshold or
+            len(second) > self._diffThreshold):
+            self._baseAssertEqual(first, second, msg)
+        firstlines = first.splitlines(keepends=True)
+        secondlines = second.splitlines(keepends=True)
+        if len(firstlines) == 1 and first.strip('\r\n') == first:
+            firstlines = [first + '\n']
+            secondlines = [second + '\n']
+        # standardMsg = '%s != %s' % _common_shorten_repr(first, second)
+        standardMsg = ''
+        diff = '\n' + ''.join(difflib.ndiff(firstlines, secondlines))
+        standardMsg = self._truncateMessage(standardMsg, diff)
+        self.fail(formatMessage(self, standardMsg, msg).rstrip('\n'))

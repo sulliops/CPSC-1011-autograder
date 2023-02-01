@@ -17,9 +17,13 @@ class TestDiff(unittest.TestCase):
     # Array of all the expected file names
     files = ['unicodeDecodeError.c', 'input.c', 'loop.c', 'SIGABRT.c', 'SIGBUS.c', 'SIGFPE.c', 'SIGILL.c', 'SIGSEGV.c']
     
-    # This has to exist for some reason
+    # Set up unittest environment
     def setUp(self):
-        pass
+        self.addTypeEqualityFunc(str, self.customCompare)
+        
+    # Define custom TypeEquality function that calls function from utils.py
+    def customCompare(self, first, second, msg=None):
+        customAssertMultiLineEqual(self, first, second, msg)
 
     # Associated test number within Gradescope
     @number("1")
