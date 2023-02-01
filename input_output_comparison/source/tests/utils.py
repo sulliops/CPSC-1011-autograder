@@ -155,11 +155,11 @@ def nonEmptyLine(s):
     return len(s.strip()) != 0
     
 def stripstr(s):
-    return s.strip()
+    return re.sub(' +', ' ', s.strip())
 
 def removeEmptyLines(text):
     lst = filter(nonEmptyLine, list(map(stripstr, text.split("\n"))))
-    return "\n".join(list(lst))
+    return "\n".join(list(lst)) + "\n"
 
 decodeErrorMessage = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
 timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
