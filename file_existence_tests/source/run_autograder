@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Copies the files into the Autograder's CWD 
+find /autograder/submission -type f ! -name '*.c' ! -name 'makefile' ! -name 'Makefile' -delete
+cp -r /autograder/submission/* /autograder/source/
+
+cd /autograder/source
+
+python3 run_tests.py > /autograder/results/results.json
