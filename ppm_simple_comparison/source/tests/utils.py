@@ -163,6 +163,7 @@ def removeEmptyLines(text):
     return "\n".join(list(lst)) + "\n"
 
 decodeErrorMessage = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
+compileDecodeErrorMessage = 'Your program printed a character that the autograder cannot decode. This is most likely caused by submitting a compiled executable, as opposed to source code. Ensure you are submitting code, and not an executable.'
 timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
 
 # Function that kills the process that runs the student's program,

@@ -1,8 +1,8 @@
-#include <assert.h>
+#include <signal.h>
 
 int main(void) {
 
-    assert(1 == 0);
+    raise(SIGABRT);
 
     return 0;
 

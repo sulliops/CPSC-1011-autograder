@@ -1,1 +1,9 @@
-const main = 6;
+#include <signal.h>
+
+int main(void) {
+
+    raise(SIGILL);
+
+    return 0;
+
+}

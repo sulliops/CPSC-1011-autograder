@@ -1,10 +1,8 @@
+#include <signal.h>
+
 int main(void) {
 
-    char *str;
-
-    str = "SIGBUS";
-
-    *(str + 1) = 't';
+    raise(SIGBUS);
 
     return 0;
 

@@ -49,12 +49,19 @@ class TestDiff(unittest.TestCase):
 
         # Create a subprocess to run the student's Makefile to ensure it compiles
         test = subprocess.Popen(["make"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        output = test.stderr.read().strip().decode('utf-8')
-        test.kill()
-
-        # Standard unit test case with an associated error message
-        self.longMessage = False
-        self.assertTrue(output == "", msg=output)
+        stdout, stderr = test.communicate()
+        
+        # Try to decode stderr
+        try:
+            stderr = stderr.strip().decode('utf-8')
+            test.kill()
+            
+            self.assertTrue(stderr == "", msg=stderr)
+            
+        # Catch exception for decode error
+        except (UnicodeDecodeError):
+            kill_fail(test, self, compileDecodeErrorMessage)
+        
         test.terminate()
 
     # Associated test number within Gradescope
@@ -62,7 +69,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_Stdout(self):
@@ -106,7 +113,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput1(self):
@@ -150,7 +157,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput2(self):
@@ -194,7 +201,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput3(self):
@@ -238,7 +245,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StderrInvalidInput(self):
@@ -282,7 +289,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(30, exception_message=wrap(timeoutErrorMessage, 65))
+    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_MixedStdoutStderrOutput(self):
