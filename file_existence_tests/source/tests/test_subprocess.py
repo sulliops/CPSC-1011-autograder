@@ -17,7 +17,7 @@ class TestDiff(unittest.TestCase):
     maxDiff = None
     
     # Array of all the expected file names
-    files = ['createFiles.c']
+    files = ['main.c']
     
     # Set up unittest environment
     def setUp(self):
@@ -96,11 +96,11 @@ class TestDiff(unittest.TestCase):
     @weight(30)
     def test_IsExecutable(self):
         # Title used by Gradescope 
-        """Check that "test.out" executable exists"""
+        """Check that "main.out" executable exists"""
         
         self.longMessage = False
 
-        file = "test.out"
+        file = "main.out"
         if Path(file).is_file():
             if os.access(Path(file), os.X_OK):
                 self.assertTrue(True)

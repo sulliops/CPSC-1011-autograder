@@ -11,6 +11,6 @@ These tests can also be adapted to test Makefile functionalities, such as the `m
 ----
 
 ## Tests:
-1. **Check that "test1.txt" file exists** (labeled test #3 on Gradescope) checks for the existence of a file called `test1.txt`, which is created by the program compiled into `test.out`. This test intentionally fails the first time it's tested (or after removal of the `test.txt` file) to demonstrate what happens when the file is not found.
-2. **Check that "test.out" executable exists** (labeled test #4 on Gradescope) checks for the existence of a file called `test.out`, which is compiled from `checkFiles.c` (submission). The test makes sure the file exists, then checks to ensure it's an executable.
-3. **Check that "test2.txt" file exists** (labeled test #5 on Gradescope) checks for the existence of a file called `test2.txt`, which is created by the program compiled into `test.out`. This test actually runs the submitted program, meaning the test should pass as long as `checkFiles.c` is configured to create the file `test2.txt`.
+1. **Check that "test1.txt" file exists** (labeled test #3 on Gradescope) checks for the existence of a file called `test1.txt`, which is created by the program compiled into `main.out`. This test intentionally fails the first time it's tested (or after removal of the `test1.txt` file) to demonstrate what happens when the file is not found.
+2. **Check that "main.out" executable exists** (labeled test #4 on Gradescope) checks for the existence of a file called `main.out`, which is compiled from `main.c` (submission). The test makes sure the file exists, then checks to ensure it's an executable.
+3. **Check that "test2.txt" file exists** (labeled test #5 on Gradescope) checks for the existence of a file called `test2.txt`, which is created by the program compiled into `main.out`. This test actually runs the submitted program, meaning the test should pass as long as `main.c` is configured to create the file `test2.txt`.
