@@ -48,7 +48,7 @@ class TestDiff(unittest.TestCase):
         """Clean compile"""
 
         # Create a subprocess to run the student's Makefile to ensure it compiles
-        test = subprocess.Popen(["make"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        test = subprocess.Popen(["make"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         # Try to decode stderr
@@ -56,7 +56,8 @@ class TestDiff(unittest.TestCase):
             stderr = stderr.strip().decode('utf-8')
             test.kill()
             
-            self.assertTrue(stderr == "", msg=stderr)
+            self.longMessage = False
+            self.assertTrue(stderr == "", msg=("See compiler output:\n" + ('\n'.join(stderr.split('\n')[:-1]))))
             
         # Catch exception for decode error
         except (UnicodeDecodeError):
