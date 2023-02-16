@@ -99,23 +99,23 @@ class TestDiff(unittest.TestCase):
                 try:
                     if header[0] != expected[0]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 65))
                     elif header[1] != expected[1]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 65))
                     elif header[2] != expected[2]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 65))
                     elif header[3] != expected[3]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 65))
                     else:
-                        self.assertTrue(True, '')
+                        self.assertTrue(True)
                 
                 # Catch exception for array out of bounds
                 except (IndexError):
                     self.longMessage = False
-                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 75))
+                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 65))
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
@@ -208,23 +208,23 @@ class TestDiff(unittest.TestCase):
                 try:
                     if header[0] != expected[0]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s header label is incorrect. Your header laber: {header[0]}, expected header label: {expected[0]}', 65))
                     elif header[1] != expected[1]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s width is incorrect. Your width: {header[1]}, expected width: {expected[1]}', 65))
                     elif header[2] != expected[2]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s height is incorrect. Your height: {header[2]}, expected height: {expected[2]}', 65))
                     elif header[3] != expected[3]:
                         self.longMessage = False
-                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 75))
+                        self.assertTrue(False, wrap(f'Your PPM image\'s maximum pixel value is incorrect. Your value: {header[3]}, expected value: {expected[3]}', 65))
                     else:
-                        self.assertTrue(True, '')
+                        self.assertTrue(True)
                 
                 # Catch exception for array out of bounds
                 except (IndexError):
                     self.longMessage = False
-                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 75))
+                    self.assertTrue(False, wrap('Your PPM image\'s header is too short, and cannot be used in autograder comparisons. Ensure your program prints the correct header information.', 65))
                 
             # Catch exception for decode error
             except (UnicodeDecodeError):
