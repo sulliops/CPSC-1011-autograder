@@ -6,6 +6,8 @@ import signal
 import re
 import textwrap
 import difflib
+from pathlib import Path
+import os
 
 # Gets the location of the `autograder` folder
 # Isn't actually necessary to run on Gradescope, but it allows for easier testing on local machines
@@ -41,6 +43,19 @@ def checkFiles(files: list):
     if len(filesMissing) != 0:
         raise AssertionError("\n" + wrap("You are missing the following files:\n{}".format(', '.join(filesMissing)), 65))
 
+# Function that uses checkFiles to determine whether the compile test should continue
+def checkSourceFiles(utest, files: list):
+    try:
+        checkFiles([file for file in files if file.endswith('.c') or file == 'Makefile' or file == 'makefile'])
+    except (AssertionError):
+        utest.assertTrue(False, msg=wrap(filesMissingErrorMessage, 65))
+        
+# Function that checks for the existence of executables to determine whether an output test should continue
+def checkExecutables(utest, executables: list):
+    for executable in executables:
+        if not Path(executable).is_file():
+            utest.assertTrue(False, msg=wrap(compileFailedErrorMessage, 65))
+
 # Series of functions that handle extra lines when comparing output with 
 # reference files
 # Thanks Eliza Sorber
@@ -58,12 +73,12 @@ decodeErrorMessage = 'Your program printed a character that the autograder canno
 compileDecodeErrorMessage = 'The compiler failed to read a character in your source code. This is most likely caused by submitting a compiled executable, as opposed to source code. Ensure you are submitting code, and not an executable.'
 timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
 compileFailedErrorMessage = 'The test cannot be run because the submitted program did not compile successfully. Ensure your program compiles without warnings.'
+filesMissingErrorMessage = 'Compilation cannot continue because the submission does not include all of the required files. Ensure you\'re submitting all of the correct files.'
 
 # Function that kills the process that runs the student's program,
 # then fails the test with a pre-defined message
 def kill_fail(proc, utest, msg):
     proc.kill()
-    utest.longMessage = False
     utest.assertTrue(False, wrap(msg, 65))
 
 # Series of exception classes that allow raising runtime exceptions

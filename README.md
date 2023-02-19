@@ -42,9 +42,11 @@ However, here's a brief overview of some standout functions:
 1. `@timeout.timeout(seconds, exception_message, use_signals=False)`: This decorator allows for individual test timeouts (which allows the script to continue if a certain input causes an infinite loop, as opposed to causing the entire autograder to hang). `exception_message` should be populated with a call to `wrap(string, max_length)`. `use_signals=False` *must* be specified in order to avoid the autograder container running out of memory.
 2. `wrap(string, max_length)`: This function wraps long error messages to a specified length to allow them to be shown cleanly in the Gradescope interface. The recommended value for `max_length` is `65` characters.
 3. `checkRuntimeErrors(proc, utest, stdout, stderr)`: This function determines if the `returncode` of a `subprocess.Popen` call matches any of the most common C program runtime errors. If a match is found, the constructor for a custom exception is called which, in turn, calls `kill_fail(proc, utest, msg)` (except for Makefile return codes, which are handled separately).
-4. `kill_fail(proc, utest, msg)`: This function kills the child process spawned by `subprocess.Popen`, disables the default `unittest` behavior of limiting long error messages, and fails the test with a message supplied by the caller.
+4. `kill_fail(proc, utest, msg)`: This function kills the child process spawned by `subprocess.Popen` and fails the test with a message supplied by the caller.
 5. `removeEmptyLines(text)`: This function works with a few helper functions to strip string outputs of empty lines and instances of more than one space.
 6. `customAssertMultiLineEqual(self, first, second, msg)`: Custom-edited version of `unittest`'s `assertMultiLineEqual()` function that uses a few helper functions to re-format diff checks for output comparisons.
+7. `checkSourceFiles(utest, files)`: Function that leverages `checkFiles()` (used in `test_checkFiles`) to ensure all source code (`.c`) files are present before compilation. Fails compilation test if files are missing. Used to stop the compilation test prematurely.
+8. `checkExecutables(utest, executables)`: Function that checks to see if all expected executables (usually just one) are present (indicating compilation has succeeded). Fails test if executables are missing. Used to stop output tests prematurely (so as not to give away answers through diff checks).
 
 ----
 

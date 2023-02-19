@@ -16,9 +16,12 @@ class TestDiff(unittest.TestCase):
     
     # Array of all the expected file names
     files = ['unicodeDecodeError.c', 'input.c', 'loop.c', 'SIGABRT.c', 'SIGBUS.c', 'SIGFPE.c', 'SIGILL.c', 'SIGSEGV.c']
+    # Names of expected executables
+    executables = ['unicodeDecodeError.out', 'loop.out', 'SIGABRT.out', 'SIGBUS.out', 'SIGFPE.out', 'SIGILL.out', 'SIGSEGV.out']
     
     # Set up unittest environment
     def setUp(self):
+        self.longMessage = False
         self.addTypeEqualityFunc(str, self.customCompare)
         
     # Define custom TypeEquality function that calls function from utils.py
@@ -47,6 +50,8 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Clean compile"""
 
+        checkSourceFiles(self, self.files)
+
         # Create a subprocess to run the student's Makefile to ensure it compiles
         test = subprocess.Popen(["make"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
@@ -57,7 +62,7 @@ class TestDiff(unittest.TestCase):
             test.kill()
             
             self.longMessage = False
-            self.assertTrue(stderr == "", msg=("See compiler output:\n" + stderr))
+            self.assertTrue(stderr == "", msg=("See compiler output:\n" + ('\n'.join(stderr.split('\n')[:-1]))))
             
         # Catch exception for decode error
         except (UnicodeDecodeError):
@@ -76,9 +81,11 @@ class TestDiff(unittest.TestCase):
     def test_UnicodeDecodeError(self):
         # Title used by Gradescope 
         """Demonstrate UnicodeDecodeError handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
-        test = subprocess.Popen(["./unicodeDecodeError input.c"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        test = subprocess.Popen(["./unicodeDecodeError.out input.c"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
@@ -112,6 +119,8 @@ class TestDiff(unittest.TestCase):
     def test_Timeout(self):
         # Title used by Gradescope 
         """Demonstrate program timeout handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./loop.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -148,6 +157,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGABRT(self):
         # Title used by Gradescope 
         """Demonstrate SIGABRT handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./SIGABRT.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -184,6 +195,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGBUS(self):
         # Title used by Gradescope 
         """Demonstrate SIGBUS handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./SIGBUS.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -220,6 +233,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGFPE(self):
         # Title used by Gradescope 
         """Demonstrate SIGFPE handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./SIGFPE.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -256,6 +271,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGILL(self):
         # Title used by Gradescope 
         """Demonstrate SIGILL handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./SIGILL.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -292,6 +309,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGSEGV(self):
         # Title used by Gradescope 
         """Demonstrate SIGSEGV handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["./SIGSEGV.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -328,6 +347,8 @@ class TestDiff(unittest.TestCase):
     def test_SIGSEGV(self):
         # Title used by Gradescope 
         """Demonstrate Makefile error handling"""
+        
+        checkExecutables(self, self.executables)
 
         # Create a subprocess to run the student's code to obtain an output
         test = subprocess.Popen(["make -s run"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

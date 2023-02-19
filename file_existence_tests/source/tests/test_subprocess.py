@@ -18,9 +18,12 @@ class TestDiff(unittest.TestCase):
     
     # Array of all the expected file names
     files = ['main.c']
+    # Names of expected executables
+    executables = ['main.out']
     
     # Set up unittest environment
     def setUp(self):
+        self.longMessage = False
         self.addTypeEqualityFunc(str, self.customCompare)
         
     # Define custom TypeEquality function that calls function from utils.py
@@ -49,6 +52,8 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Clean compile"""
 
+        checkSourceFiles(self, self.files)
+
         # Create a subprocess to run the student's Makefile to ensure it compiles
         test = subprocess.Popen(["make"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
@@ -59,7 +64,7 @@ class TestDiff(unittest.TestCase):
             test.kill()
             
             self.longMessage = False
-            self.assertTrue(stderr == "", msg=("See compiler output:\n" + stderr))
+            self.assertTrue(stderr == "", msg=("See compiler output:\n" + ('\n'.join(stderr.split('\n')[:-1]))))
             
         # Catch exception for decode error
         except (UnicodeDecodeError):
@@ -122,8 +127,10 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that "test2.txt" file exists"""
         
+        checkExecutables(self, self.executables)
+        
         # Create a subprocess to run the student's code to obtain an output
-        test = subprocess.Popen(["./test.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        test = subprocess.Popen(["./main.out"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = test.communicate()
         
         try:
