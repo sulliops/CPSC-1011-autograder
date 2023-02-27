@@ -60,3 +60,9 @@ cd source
 chmod +x run_autograder
 ./run_autograder
 ```
+
+----
+
+## Notes:
+1. The script at `source/run_autograder` has been configured to automatically delete any files in `submission/` not ending with the `.c` extension or not called `makefile` or `Makefile`. To add an exception, use the exclusion structure: `! -name '[FILE_NAME_OR_EXT]'` where `[FILE_NAME_OR_EXT]` matches a complete file name or a wildcard like `*.txt`
+2. The script at `source/run_autograder` has been configured to automatically copy any files remaining in `submission/` not previously automatically removed regardless of the directory structure. This means that students uploading a zipped folder (ex: `folder.zip`, which unzips to `folder/` with source files inside) will not have their directory structure preserved. If you need to preserve zipped folder structure, replace the line `find /autograder/submission -type f -exec cp {} /autograder/source \;` with `cp -r /autograder/submission/* /autograder/source/`.
