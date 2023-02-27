@@ -2,7 +2,7 @@
 
 # Copies the files into the Autograder's CWD 
 find /autograder/submission -type f ! -name '*.c' ! -name 'makefile' ! -name 'Makefile' -delete
-cp -r -T /autograder/submission/* /autograder/source/
+find /autograder/submission -type f -exec cp {} /autograder/source \;
 
 cd /autograder/source
 

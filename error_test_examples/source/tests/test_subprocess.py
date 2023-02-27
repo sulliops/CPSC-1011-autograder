@@ -61,7 +61,7 @@ class TestDiff(unittest.TestCase):
             stderr = stderr.strip().decode('utf-8')
             test.kill()
             
-            self.assertTrue(stderr == "", msg=("See compiler output:\n" + ('\n'.join(stderr.split('\n')[:-1]))))
+            self.assertTrue(stderr == "", msg=("See compiler output:\n" + stderr))
             
         # Catch exception for decode error
         except (UnicodeDecodeError):
