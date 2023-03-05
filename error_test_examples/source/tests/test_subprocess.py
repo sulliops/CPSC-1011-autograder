@@ -92,7 +92,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -100,6 +100,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -130,7 +134,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -138,6 +142,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -168,7 +176,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -176,6 +184,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -206,7 +218,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -214,6 +226,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -244,7 +260,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -252,6 +268,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -282,7 +302,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -290,6 +310,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -320,7 +344,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -328,6 +352,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):
@@ -358,7 +386,7 @@ class TestDiff(unittest.TestCase):
             
             # Try to decode stdout
             try:
-                stdout = stdout.strip().decode('utf-8')
+                stdout = checkForUninitializedChars(stdout.strip().decode('utf-8'))
                 test.kill()
                 
                 self.assertTrue(True, msg='Passed.')
@@ -366,6 +394,10 @@ class TestDiff(unittest.TestCase):
             # Catch exception for decode error
             except (UnicodeDecodeError):
                 kill_fail(test, self, decodeErrorMessage)
+                
+            # Catch exception for uninitialized characters
+            except (UninitializedCharError):
+                kill_fail(test, self, uninitializedCharacterMessage)
         
         # Catch runtime error exceptions
         except (RuntimeAbort, RuntimeSegFault, RuntimeFPE, RuntimeBusError, RuntimeIllegalInstruction, MakefileError):

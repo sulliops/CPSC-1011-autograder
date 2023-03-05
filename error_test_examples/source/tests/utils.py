@@ -70,6 +70,7 @@ def removeEmptyLines(text):
     return "\n".join(list(lst)) + "\n"
 
 decodeErrorMessage = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
+uninitializedCharacterMessage = 'Your program printed an uninitialized char variable, which the autograder cannot decode. Ensure your program prints valid characters.'
 compileDecodeErrorMessage = 'The compiler failed to read a character in your source code. This is most likely caused by submitting a compiled executable, as opposed to source code. Ensure you are submitting code, and not an executable.'
 timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
 compileFailedErrorMessage = 'The test cannot be run because the submitted program did not compile successfully. Ensure your program compiles without warnings.'
@@ -172,3 +173,15 @@ def customAssertMultiLineEqual(self, first, second, msg=None):
         diff = '\n' + ''.join(difflib.ndiff(firstlines, secondlines))
         standardMsg = self._truncateMessage(standardMsg, diff)
         self.fail(formatMessage(self, standardMsg, msg).rstrip('\n'))
+        
+# Custom exception for use when uninitialized characters are detected
+class UninitializedCharError(Exception):
+    pass
+        
+# Function that checks for uninitialized characters in program output
+# This should check for '\u0000', which is not caught by UnicodeDecodeError
+def checkForUninitializedChars(str):
+    if '\u0000' in str:
+        raise UninitializedCharError
+    else:
+        return str

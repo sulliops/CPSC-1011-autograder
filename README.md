@@ -47,6 +47,7 @@ However, here's a brief overview of some standout functions:
 6. `customAssertMultiLineEqual(self, first, second, msg)`: Custom-edited version of `unittest`'s `assertMultiLineEqual()` function that uses a few helper functions to re-format diff checks for output comparisons.
 7. `checkSourceFiles(utest, files)`: Function that leverages `checkFiles()` (used in `test_checkFiles`) to ensure all source code (`.c`) files are present before compilation. Fails compilation test if files are missing. Used to stop the compilation test prematurely.
 8. `checkExecutables(utest, executables)`: Function that checks to see if all expected executables (usually just one) are present (indicating compilation has succeeded). Fails test if executables are missing. Used to stop output tests prematurely (so as not to give away answers through diff checks).
+9. `checkForUninitializedChars(str)`: Function that checks output (passed in as `str`) for Unicode NULL character `\u0000`, which is printed by uninitialized characters in student program output and not caught by `UnicodeDecodeError`. `str` should be passed in like `stdout.strip().decode('utf-8')` for maximum efficiency.
 
 ----
 
