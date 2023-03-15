@@ -11,9 +11,6 @@ from utils import *
 
 # Main unit test class
 class TestDiff(unittest.TestCase):
-    # Set maxDiff to None to allow large diff checks
-    maxDiff = None
-    
     # Array of all the expected file names
     files = ['unicodeDecodeError.c', 'input.c', 'loop.c', 'SIGABRT.c', 'SIGBUS.c', 'SIGFPE.c', 'SIGILL.c', 'SIGSEGV.c']
     # Names of expected executables
@@ -21,6 +18,7 @@ class TestDiff(unittest.TestCase):
     
     # Set up unittest environment
     def setUp(self):
+        self.maxDiff = None
         self.longMessage = False
         self.addTypeEqualityFunc(str, self.customCompare)
         

@@ -13,9 +13,6 @@ import os
 
 # Main unit test class
 class TestDiff(unittest.TestCase):
-    # Set maxDiff to None to allow large diff checks
-    maxDiff = None
-    
     # Array of all the expected file names
     files = ['main.c']
     # Names of expected executables
@@ -23,6 +20,7 @@ class TestDiff(unittest.TestCase):
     
     # Set up unittest environment
     def setUp(self):
+        self.maxDiff = None
         self.longMessage = False
         self.addTypeEqualityFunc(str, self.customCompare)
         
@@ -83,8 +81,6 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that "test1.txt" file exists"""
         
-        self.longMessage = False
-
         file = "test1.txt"
         if Path(file).is_file():
             self.assertTrue(True)
@@ -103,8 +99,6 @@ class TestDiff(unittest.TestCase):
         # Title used by Gradescope 
         """Check that "main.out" executable exists"""
         
-        self.longMessage = False
-
         file = "main.out"
         if Path(file).is_file():
             if os.access(Path(file), os.X_OK):
@@ -135,8 +129,6 @@ class TestDiff(unittest.TestCase):
         try:
             checkRuntimeErrors(test, self, stdout, stderr)
             
-            self.longMessage = False
-
             file = "test2.txt"
             if Path(file).is_file():
                 self.assertTrue(True)
