@@ -1,3 +1,4 @@
+
 # python-Gradescope-autograder
 Template repository for Gradescope autograders used in Clemson CPSC-1011 during the F22 and S23 semesters.
 
@@ -16,7 +17,7 @@ Each autograder has a standard set of files and directories that are used as par
 6. `source/run_tests.py`: Python script that starts the unit testing process.
 7. `source/setup.sh`: Bash script that installs Python and any `pip3` packages listed in `source/requirements.txt`.
 8. *(Optional)* `makefile`: Makefile that compiles/runs student submissions, if students are not supplying their own Makefile.
-9. *(Optional)* `source/input/`: Folder which may contain any input files that can be passed as stdin to a given test.
+9. *(Optional)* `source/input/`: Folder which may contain any input files that can be passed as `stdin` to a given test.
 10. *(Optional)* `source/reference/`: Folder which may contain any sample output files that can be compared against in a given test.
 11. `source/tests/`: Folder which contains Python scripts used in unit testing.
 12. `source/tests/utils.py`: Python script which contains helper functions/methods that improve the unit testing process.
@@ -30,7 +31,7 @@ Each autograder has a standard set of files and directories that are used as par
 Each version of `source/tests/test_subprocess.py` in this repository contains tests that should be included in all autograder testing.
 
 1. `test_checkFiles`: A test that checks that students have submitted all required files for an assignment, based on an array of file names (found immediately before this test in `source/tests/test_subprocess.py`).
-2. `test_Compile`: A test that compiles student programs by running `make`. This test can be modified as needed.
+2. `test_Compile`: A test that compiles student programs by running `make` or any compilation command. This test can be modified as needed.
 
 ----
 
@@ -46,8 +47,11 @@ However, here's a brief overview of some standout functions:
 5. `removeEmptyLines(text)`: This function works with a few helper functions to strip string outputs of empty lines and instances of more than one space.
 6. `customAssertMultiLineEqual(self, first, second, msg)`: Custom-edited version of `unittest`'s `assertMultiLineEqual()` function that uses a few helper functions to re-format diff checks for output comparisons.
 7. `checkSourceFiles(utest, files)`: Function that leverages `checkFiles()` (used in `test_checkFiles`) to ensure all source code (`.c`) files are present before compilation. Fails compilation test if files are missing. Used to stop the compilation test prematurely.
-8. `checkExecutables(utest, executables)`: Function that checks to see if all expected executables (usually just one) are present (indicating compilation has succeeded). Fails test if executables are missing. Used to stop output tests prematurely (so as not to give away answers through diff checks).
-9. `checkForUninitializedChars(str)`: Function that checks output (passed in as `str`) for Unicode NULL character `\u0000`, which is printed by uninitialized characters in student program output and not caught by `UnicodeDecodeError`. `str` should be passed in like `stdout.strip().decode('utf-8')` for maximum efficiency.
+    1. This method expects a list of strings to iterate through. If only one source file needs to be checked, it should still be passed as a single-item list.
+9. `checkExecutables(utest, executables)`: Function that checks to see if all expected executables (usually just one) are present (indicating compilation has succeeded). Fails test if executables are missing. Used to stop output tests prematurely (so as not to give away answers through diff checks).
+    1. This method expects a list of strings to iterate through. If only one executable needs to be checked, it should still be passed as a single-item list.
+    2. See [Notes](https://github.com/sulliops/python-Gradescope-autograder#notes) for information about checking variably-named executables produced by Makefiles.
+10. `checkForUninitializedChars(str)`: Function that checks output (passed in as `str`) for Unicode NULL character `\u0000`, which is printed by uninitialized characters in student program output and not caught by `UnicodeDecodeError`. `str` should be passed in like `stdout.strip().decode('utf-8')` for maximum efficiency.
 
 ----
 
@@ -65,5 +69,6 @@ chmod +x run_autograder
 ----
 
 ## Notes:
-1. The script at `source/run_autograder` has been configured to automatically delete any files in `submission/` not ending with the `.c` extension or not called `makefile` or `Makefile`. To add an exception, use the exclusion structure: `! -name '[FILE_NAME_OR_EXT]'` where `[FILE_NAME_OR_EXT]` matches a complete file name or a wildcard like `*.txt`
-2. The script at `source/run_autograder` has been configured to automatically copy any files remaining in `submission/` not previously automatically removed regardless of the directory structure. This means that students uploading a zipped folder (ex: `folder.zip`, which unzips to `folder/` with source files inside) will not have their directory structure preserved. If you need to preserve zipped folder structure, replace the line `find /autograder/submission -type f -exec cp {} /autograder/source \;` with `cp -r /autograder/submission/* /autograder/source/`.
+1. The `checkExecutables(utest, executables)` method can be used to check executables produced by Makefiles when the name of the executable is not known by importing the `os` package and passing `os.popen('ls -t | head -n1').read().split()`, which returns the file which was modified last at the time of execution, as the argument for `executables`. However, in cases where the submitted program being tested produces a file of its own in the same directory as its executable, this method may fail; a workaround is to force recompilation with `os.popen('make -B')` or an equivalent command. Additionally, this method may not function as intended if one Makefile target creates more than one executable.
+2. The script at `source/run_autograder` has been configured to automatically delete any files in `submission/` not ending with the `.c` extension or not called `makefile` or `Makefile`. To add an exception, use the exclusion structure: `! -name '[FILE_NAME_OR_EXT]'` where `[FILE_NAME_OR_EXT]` matches a complete file name or a wildcard like `*.txt`
+3. The script at `source/run_autograder` has been configured to automatically copy any files remaining in `submission/` not previously automatically removed regardless of the directory structure. This means that students uploading a zipped folder (ex: `folder.zip`, which unzips to `folder/` with source files inside) will not have their directory structure preserved. If you need to preserve zipped folder structure, replace the line `find /autograder/submission -type f -exec cp {} /autograder/source \;` with `cp -r /autograder/submission/* /autograder/source/`.
