@@ -52,6 +52,9 @@ def checkSourceFiles(utest, files: list):
         
 # Function that checks for the existence of executables to determine whether an output test should continue
 def checkExecutables(utest, executables: list):
+    if not executables:
+        utest.assertTrue(False, msg=wrap(compileFailedErrorMessage, 65))
+    
     for executable in executables:
         if not Path(executable).is_file():
             utest.assertTrue(False, msg=wrap(compileFailedErrorMessage, 65))
