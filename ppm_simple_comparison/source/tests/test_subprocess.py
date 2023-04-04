@@ -72,7 +72,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(10)
     def test_PPMWidth15Header(self):
@@ -135,7 +135,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(32.5)
     def test_PPMWidth15Image(self):
@@ -185,7 +185,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(10)
     def test_PPMWidth42Header(self):
@@ -251,7 +251,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(32.5)
     def test_PPMWidth42Image(self):

@@ -72,7 +72,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_Stdout(self):
@@ -122,7 +122,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput1(self):
@@ -172,7 +172,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput2(self):
@@ -222,7 +222,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StdoutInput3(self):
@@ -272,7 +272,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_StderrInvalidInput(self):
@@ -322,7 +322,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(15)
     def test_MixedStdoutStderrOutput(self):

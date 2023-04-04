@@ -75,9 +75,13 @@ def removeEmptyLines(text):
 decodeErrorMessage = 'Your program printed a character that the autograder cannot decode. Ensure your program prints valid characters.'
 uninitializedCharacterMessage = 'Your program printed an uninitialized char variable, which the autograder cannot decode. Ensure your program prints valid characters.'
 compileDecodeErrorMessage = 'The compiler failed to read a character in your source code. This is most likely caused by submitting a compiled executable, as opposed to source code. Ensure you are submitting code, and not an executable.'
-timeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
+compileTimeoutErrorMessage = 'The autograder timed out while trying to compile your program. If your program is compiled using a makefile, ensure your makefile is not malformed.'
+programTimeoutErrorMessage = 'Your program timed out while running this test case, likely due to an infinite loop or an issue accepting inputs. Ensure your program does not loop infinitely, and make sure the test inputs are handled correctly.'
 compileFailedErrorMessage = 'The test cannot be run because the submitted program did not compile successfully. Ensure your program compiles without warnings.'
 filesMissingErrorMessage = 'Compilation cannot continue because the submission does not include all of the required files. Ensure you\'re submitting all of the correct files.'
+
+findLastExecutableCommand = "find -type f -executable ! -name 'run_autograder' -printf '%T@ %p\n' | sort -n | tail -1 | awk '{print $2}'"
+removeLastExecutableCommand = "find -type f -executable ! -name 'run_autograder' -printf '%T@ %p\n' | sort -n | tail -1 | awk '{print $2}' | xargs rm -r"
 
 # Function that kills the process that runs the student's program,
 # then fails the test with a pre-defined message

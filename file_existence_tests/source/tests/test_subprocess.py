@@ -74,7 +74,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(30)
     def test_FileExistsWithoutProgramRun(self):
@@ -92,7 +92,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(30)
     def test_IsExecutable(self):
@@ -113,7 +113,7 @@ class TestDiff(unittest.TestCase):
     # Test visibility
     @visibility("visible")
     # Individual test case timeout (in seconds)
-    @timeout.timeout(10, exception_message=wrap(timeoutErrorMessage, 65), use_signals=False)
+    @timeout.timeout(10, exception_message=wrap(programTimeoutErrorMessage, 65), use_signals=False)
     # Associated point value within Gradescope
     @weight(30)
     def test_FileExistsWithProgramRun(self):

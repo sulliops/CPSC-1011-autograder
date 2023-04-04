@@ -32,6 +32,15 @@ Each version of `source/tests/test_subprocess.py` in this repository contains te
 
 1. `test_checkFiles`: A test that checks that students have submitted all required files for an assignment, based on an array of file names (found immediately before this test in `source/tests/test_subprocess.py`).
 2. `test_Compile`: A test that compiles student programs by running `make` or any compilation command. This test can be modified as needed.
+	1. If a student-supplied Makefile will be used to compile students' programs, replace the line `stdout, stderr = test.communicate()` in the compile test with the following to catch issues with malformed Makefiles that would cause the autograder to timeout:
+
+```
+try:
+    stdout, stderr = test.communicate(timeout=10)
+except (subprocess.TimeoutExpired):
+    os.popen(removeLastExecutableCommand)
+    kill_fail(test, self, compileTimeoutErrorMessage)
+```
 
 ----
 
@@ -69,6 +78,6 @@ chmod +x run_autograder
 ----
 
 ## Notes:
-1. The `checkExecutables(utest, executables)` method can be used to check executables produced by Makefiles when the name of the executable is not known by importing the `os` package and passing `os.popen("find -type f -executable ! -name 'run_autograder' -printf '%T@ %p\n' | sort -n | tail -1 | awk '{print $2}'").read().split()`, which returns the file which was modified last at the time of execution, as the argument for `executables`. However, in cases where the submitted program being tested produces a file of its own in the same directory as its executable, this method may fail; a workaround is to force recompilation with `os.popen('make -B')` or an equivalent command. Additionally, this method may not function as intended if one Makefile target creates more than one executable.
+1. The `checkExecutables(utest, executables)` method can be used to check executables produced by Makefiles when the name of the executable is not known by importing the `os` package and passing `os.popen(findLastExecutableCommand).read().split()`, which returns the file which was modified last at the time of execution, as the argument for `executables`. However, in cases where the submitted program being tested produces a file of its own in the same directory as its executable, this method may fail; a workaround is to force recompilation with `os.popen('make -B')` or an equivalent command. Additionally, this method may not function as intended if one Makefile target creates more than one executable.
 2. The script at `source/run_autograder` has been configured to automatically delete any files in `submission/` not ending with the `.c` extension or not called `makefile` or `Makefile`. To add an exception, use the exclusion structure: `! -name '[FILE_NAME_OR_EXT]'` where `[FILE_NAME_OR_EXT]` matches a complete file name or a wildcard like `*.txt`
 3. The script at `source/run_autograder` has been configured to automatically copy any files remaining in `submission/` not previously automatically removed regardless of the directory structure. This means that students uploading a zipped folder (ex: `folder.zip`, which unzips to `folder/` with source files inside) will not have their directory structure preserved. If you need to preserve zipped folder structure, replace the line `find /autograder/submission -type f -exec cp {} /autograder/source \;` with `cp -r /autograder/submission/* /autograder/source/`.
