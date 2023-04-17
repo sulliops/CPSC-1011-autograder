@@ -32,7 +32,7 @@ Each version of `source/tests/test_subprocess.py` in this repository contains te
 
 1. `test_checkFiles`: A test that checks that students have submitted all required files for an assignment, based on an array of file names (found immediately before this test in `source/tests/test_subprocess.py`).
 2. `test_Compile`: A test that compiles student programs by running `make` or any compilation command. This test can be modified as needed.
-	1. If a student-supplied Makefile will be used to compile students' programs, replace the line `stdout, stderr = test.communicate()` in the compile test with the following to catch issues with malformed Makefiles that would cause the autograder to timeout:
+	1. If a student-supplied Makefile will be used to compile students' programs, replace the line `stdout, stderr = test.communicate()` in the compile test with the following to catch issues with malformed Makefiles that would cause the autograder to timeout (note, this method is not foolproof):
 
 ```
 try:
